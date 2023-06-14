@@ -6,7 +6,7 @@
  * @return {string[]} Os nomes dos alunos que fizeram este exercício.
  */
 function nomesDosAlunos() {
-    return [ "João da Silva", "Maria da Silva" ];
+    return [ "Marina Barboza", "Jayne Gama", "Alicia Patricia", "kamille Vitória" ];
 }
 
 // EXERCÍCIO 1.
@@ -17,7 +17,11 @@ function nomesDosAlunos() {
  * @throws ConvertError Se o valor em graus não for um número finito.
  */
 function grausParaRadianos(graus) {
-    naoFizIssoAinda();
+    if (graus == null || !Number.isFinite(graus) || isNaN(graus) || graus == undefined){
+        throw new ConvertError  ("O valor deve ser um número finito");
+    }
+    const radianos = graus * Math.PI / 180;
+    return radianos;
 }
 
 // EXERCÍCIO 2.
@@ -28,7 +32,11 @@ function grausParaRadianos(graus) {
  * @throws ConvertError Se o valor em radianos não for um número finito.
  */
 function radianosParaGraus(radianos) {
-    naoFizIssoAinda();
+    if (radianos == null || !Number.isFinite(radianos) || isNaN(radianos) || radianos == undefined){
+        throw new ConvertError  ("O valor deve ser um número finito");
+    }
+    const graus = 180 * radianos / Math.PI;
+    return graus;
 }
 
 // EXERCÍCIO 3.
@@ -44,8 +52,36 @@ function radianosParaGraus(radianos) {
  * @throw ConvertError Se o valor não for um número finito ou se qualquer uma das escalas for diferente de "C", "F" ou "K".
  */
 function converterTemperatura(valor, de, para) {
-    naoFizIssoAinda();
+    if (!Number.isFinite(valor)){
+        throw new ConvertError  ("O valor deve ser um número finito e com escalas C, F ou K");
 }
+    if (valor != "F" || valor != "C" || valor != "K") {throw new ConvertError ("Os parametros estão incorretos");}
+    //não terminei não mudar as partes de erro
+    if (para == "F"){
+        if (para == "K"){
+            const Kel = (valor + 273.15)
+            return Number(kel);
+        }
+    }
+    if (para == "F"){
+        const Far = (valor * 1.8 + 32)
+        return Number(Far);
+    }
+    if (para == "C"){
+        return valor;
+    }
+    if (de == "K"){
+        if (para == "C"){
+            const CK = (valor - 273.15)
+            return Number(Ck);
+        }
+    }
+        if (para == "K"){
+            return valor;
+        }
+
+    }
+
 
 // EXERCÍCIO 4.
 /**
@@ -55,7 +91,16 @@ function converterTemperatura(valor, de, para) {
  * @throw ConvertError Se o parâmetro não for um número inteiro ou for menor que zero.
  */
 function fatorial(n) {
-    naoFizIssoAinda();
+    if (!Number.isFinite(n) || n < 0){
+        throw new ConvertError  ("O valor deve ser um número inteiro positivo");
+    }
+    if (n == 0 || n == 1n) {
+        return 1;
+      } 
+      else {
+        return n * fatorial(n - 1);
+      }
+      
 }
 
 // EXERCÍCIO 5.
@@ -72,8 +117,16 @@ function fatorial(n) {
  * @throw ConvertError Se o parâmetro não for um número inteiro ou for menor que zero.
  */
 function fibonacci(n) {
-    naoFizIssoAinda();
-}
+    if (!Number.isInteger(n) || n < 0) {
+        throw new ConvertError("O valor tem que ser um número inteiro não negativo");
+    }
+        if (n == 0) {
+          return 1;
+        } else {
+          return n * fibonacci(n - 1);
+        }
+      }
+
 
 // EXERCÍCIO 6.
 /**
@@ -84,7 +137,10 @@ function fibonacci(n) {
  * @throw ConvertError Se o parâmetro não for um número inteiro ou for menor que zero.
  */
 function triangular(n) {
-    naoFizIssoAinda();
+    if (!Number.isInteger(n) || n < 0) {
+        throw new ConvertError("O valor tem que ser um número inteiro não negativo");
+    }
+    return BigInt((n * (n + 1)) / 2);
 }
 
 // EXERCÍCIO 7.
@@ -95,7 +151,7 @@ function triangular(n) {
  * @return {RegExp} Uma expressão regular.
  */
 function cepRegex() {
-    naoFizIssoAinda();
+    return /^\d{5}-?\d{3}$/;
 }
 
 // EXERCÍCIO 8.
@@ -105,7 +161,7 @@ function cepRegex() {
  * @return {RegExp} Uma expressão regular.
  */
 function dddRegex() {
-    naoFizIssoAinda();
+    return /^(1[1-9]|[2-9]\d)(?!.*\1$)$/g;
 }
 
 // EXERCÍCIO 9.
@@ -118,7 +174,25 @@ function dddRegex() {
  * @throws PesquisaCepError Se o CEP não for encontrado.
  */
 async function pesquisarCep(cep) {
-    naoFizIssoAinda();
+    if (typeof cep != "string" || !/^\d{5}-?\d{3}$/.test(cep)){
+        throw new ConvertError('Cep inválido');
+    }
+    const url = `http://viacep.com.br/ws/${cep}/json/`;
+    const response = await fetch(url);
+
+    if (!response.ok){
+        throw new ConvertError('Cep não encontrado');
+    }
+    const data = awaitresponse.json();
+    if (data.erro){
+        throw new PesquisarCepError('CEP não encontrado');
+    }
+    const logradouro = typeof data.logradouro == "string" ? data.logradouro : "";
+    const bairro = typeof data.bairro == "string" ? data.bairro : "";
+    const localidade = typeof data.localidade == "string" ? data.localidade : "";
+    const uf =typeof data.uf == "string" ? data.uf : "";
+
+    return new Endereco(logradouro,bairro,localidade,uf);
 }
 
 // EXERCÍCIO 10.
@@ -130,7 +204,16 @@ async function pesquisarCep(cep) {
  * algum erro na busca, coloque a mensagem de erro lá também (use o try-catch para isso).
  */
 async function pesquisarCepDOM() {
-    naoFizIssoAinda();
+    const cepInput = document.getElementById('cep');
+    const resultadoInput = document.getElementById('resultado-cep');
+    try {
+        const endereco =await pesquisarCep(cepInput.value);
+        const enderecoStr = `${endereco.logradouro} - ${endereco.bairro} - ${endereco.localidade} - ${endereco.uf}`;
+            resultadoInput,value = enderecoStr;
+    }
+    catch(error){
+        resultadoInput.value = error.message;
+    }
 }
 
 // EXERCÍCIO 11.
@@ -142,7 +225,36 @@ async function pesquisarCepDOM() {
  * @throws PokemonNaoEncontradoError Se não existir pokémon com o nome ou número dado.
  */
 async function pesquisarPokemon(chave) {
-    naoFizIssoAinda();
+    const url = isNaN(chave)
+    ? `https://pokeapi.co/api/v2/pokemon/${chave}`
+    : `https://pokeapi.co/api/v2/pokemon/${chave}/`;
+    try {
+        const response = await fetch(url);
+        if (!response.ok){
+            throw new PokemonNaoEncontradoError('Pokémon não encontrado');
+        }
+        const data = await response.json();
+        const name = data.species.name;
+        const number = data.id;
+        const imageUrl = data.sprites.other['official-artwork'].front_default;
+
+        if (!name || !number || !imageUrl){
+            throw new PokemonNaoEncontradoError('Informações não encontradas');
+        }
+        return {
+            name: name,
+            number: number,
+            imageUrl:imageUrl
+        }
+    } 
+    catch (error){
+        if (error instanceof PokemonNaoEncontradoError){
+            throw error;
+        } else {
+            console.error(error);
+            throw new Error("Erro na pesquisa");
+        }
+    }
 }
 
 // EXERCÍCIO 12.
@@ -154,5 +266,18 @@ async function pesquisarPokemon(chave) {
  * o link https://cdn-icons-png.flaticon.com/256/4467/4467515.png na foto (use o try-catch).
  */
 async function pesquisarPokemonDOM() {
-    naoFizIssoAinda();
+    const chave = document.getElementById('pokemon-pesquisa').value;
+    const nomeInput= document.getElementById('pokemon-nome');
+    const numeroInput = document.getElementById('pokemon-numero');
+    const fotoImg = document.getElementById('pokemon-foto');
+    try {
+        const pokemonData = await pesquisarPokemon(chave);
+        nomeInput.value = pokemonData.name;
+        numeroInput.value = pokemonData.number;
+        fotoImg.src = pokemonData.imageUrl;
+    }
+    catch (error){
+        nomeInput.value = error.message;
+        fotoImg.src = 'https://cdn-icons-png.flaticon.com/256/4467/4467515.png';
+    }
 }
