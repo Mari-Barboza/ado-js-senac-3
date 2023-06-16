@@ -6,7 +6,7 @@
  * @return {string[]} Os nomes dos alunos que fizeram este exercício.
  */
 function nomesDosAlunos() {
-    return [ "Marina Barboza", "Jayne Gama", "Alicia Patricia", "kamille Vitória" ];
+    return [ "Marina Barboza", "Jayne Gama", "Alicia Patricia", "Kamille Vitória" ];
 }
 
 // EXERCÍCIO 1.
@@ -52,36 +52,46 @@ function radianosParaGraus(radianos) {
  * @throw ConvertError Se o valor não for um número finito ou se qualquer uma das escalas for diferente de "C", "F" ou "K".
  */
 function converterTemperatura(valor, de, para) {
-    if (!Number.isFinite(valor)){
-        throw new ConvertError  ("O valor deve ser um número finito e com escalas C, F ou K");
-}
-    if (valor != "F" || valor != "C" || valor != "K") {throw new ConvertError ("Os parametros estão incorretos");}
-    //não terminei não mudar as partes de erro
-    if (para == "F"){
-        if (para == "K"){
-            const Kel = (valor + 273.15)
-            return Number(kel);
+    if (!Number.isFinite(valor)) {
+        throw new ConvertError("O valor deve ser um número finito e com escalas C, F ou K");
+      }
+    
+      if (de !== "C" && de !== "F" && de !== "K") {
+        throw new ConvertError("A escala de origem deve ser 'C', 'F' ou 'K'");
+      }
+    
+      if (para !== "C" && para !== "F" && para !== "K") {
+        throw new ConvertError("A escala de destino deve ser 'C', 'F' ou 'K'");
+      }
+    
+      if (de === para) {
+        return valor; // Nenhuma conversão necessária se as escalas são iguais
+      }
+    
+      let resultado;
+    
+      if (de === "C") {
+        if (para === "F") {
+          resultado = valor * 1.8 + 32;
+        } else if (para === "K") {
+          resultado = valor + 273.15;
         }
-    }
-    if (para == "F"){
-        const Far = (valor * 1.8 + 32)
-        return Number(Far);
-    }
-    if (para == "C"){
-        return valor;
-    }
-    if (de == "K"){
-        if (para == "C"){
-            const CK = (valor - 273.15)
-            return Number(Ck);
+      } else if (de === "F") {
+        if (para === "C") {
+          resultado = (valor - 32) / 1.8;
+        } else if (para === "K") {
+          resultado = (valor + 459.67) * (5 / 9);
         }
-    }
-        if (para == "K"){
-            return valor;
+      } else if (de === "K") {
+        if (para === "C") {
+          resultado = valor - 273.15;
+        } else if (para === "F") {
+          resultado = valor * (9 / 5) - 459.67;
         }
-
+      }
+    
+      return Number(resultado.toFixed(2));
     }
-
 
 // EXERCÍCIO 4.
 /**
@@ -117,15 +127,27 @@ function fatorial(n) {
  * @throw ConvertError Se o parâmetro não for um número inteiro ou for menor que zero.
  */
 function fibonacci(n) {
-    if (!Number.isInteger(n) || n < 0) {
-        throw new ConvertError("O valor tem que ser um número inteiro não negativo");
-    }
-        if (n == 0) {
-          return 1;
-        } else {
-          return n * fibonacci(n - 1);
-        }
-      }
+	if (!Number.isInteger(n) || n < 0) {
+		throw new ConvertError('O parâmetro deve ser um número inteiro não negativo.');
+	}
+
+	let a = BigInt(0n);
+	let b = BigInt(1n);
+
+	if (n === 0) {
+		return a;
+	} else if (n === 1) {
+		return b;
+	}
+
+    for (let i = 2; i <= n; i++) {
+		[a, b] = [b, a + b];
+	}
+
+	return b;
+}
+
+      
 
 
 // EXERCÍCIO 6.
